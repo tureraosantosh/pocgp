@@ -2,13 +2,17 @@ package com.example.pocgp.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class Employee {
 
     @Id

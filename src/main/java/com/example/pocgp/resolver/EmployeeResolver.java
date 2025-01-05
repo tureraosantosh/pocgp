@@ -4,24 +4,27 @@ package com.example.pocgp.resolver;
 
 import com.example.pocgp.entity.Employee;
 import com.example.pocgp.repo.EmployeeRepository;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 public class EmployeeResolver {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @QueryMapping
-    public Employee getEmployee(Long id) {
-        return employeeRepository.findById(id).orElse(null);
+    public Employee getEmployee(@Argument Long id) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        return employee;
     }
 
     @MutationMapping
-    public Employee createEmployee(String name, Long departmentId) {
+    public Employee createEmployee(@Argument String name,@Argument Long departmentId) {
         Employee employee = new Employee();
         employee.setName(name);
         // set department (You can fetch it based on departmentId)
@@ -30,7 +33,7 @@ public class EmployeeResolver {
     }
 
     @MutationMapping
-    public Employee updateEmployee(Long id, String name, Long departmentId) {
+    public Employee updateEmployee(@Argument Long id,@Argument String name, @Argument Long departmentId) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
         employee.setName(name);
         // Update department here
@@ -38,7 +41,7 @@ public class EmployeeResolver {
     }
 
     @MutationMapping
-    public boolean deleteEmployee(Long id) {
+    public boolean deleteEmployee(@Argument Long id) {
         employeeRepository.deleteById(id);
         return true;
     }
