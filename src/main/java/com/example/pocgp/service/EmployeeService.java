@@ -2,8 +2,11 @@ package com.example.pocgp.service;
 
 import com.example.pocgp.entity.Employee;
 import com.example.pocgp.repo.EmployeeRepository;
+import com.example.pocgp.repo.EmployeeSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +42,18 @@ public class EmployeeService {
         return null; // Return null or throw an exception if not found
     }
 
+    public List<Employee> getFilteredAndSortedEmployees(String createdBy, String createdOn,
+                                                        String departmentName, String addressCity,
+                                                        String sortField, String sortDirection) {
+        Specification<Employee> spec = Specification.where(EmployeeSpecification.createdBy(createdBy))
+                .and(EmployeeSpecification.createdOn(createdOn))
+                .and(EmployeeSpecification.departmentName(departmentName))
+                .and(EmployeeSpecification.addressCity(addressCity));
+
+        Sort sort = Sort.by(sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
+        return employeeRepository.findAll(spec, sort);
+
+}
     // Delete an employee
     public boolean deleteEmployee(Long id) {
         if (employeeRepository.existsById(id)) {

@@ -20,12 +20,28 @@ type Department {
     id: ID!
     name: String!
 }
+input EmployeeFilter {
+    createdBy: String
+    createdOn: String
+    departmentName: String
+    addressCity: String
+}
 
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input EmployeeSort {
+    field: String
+    direction: SortDirection
+}
 # Queries to fetch data
 type Query {
     getEmployee(id: ID!): Employee
     getDepartment(id: ID!): Department
     getAddress(id: ID!): Address
+    employees(filter: EmployeeFilter, sort: EmployeeSort): [Employee]
 }
 
 # Mutations to modify data
@@ -42,3 +58,6 @@ type Mutation {
     updateDepartment(id: ID!, name: String): Department
     deleteDepartment(id: ID!): Boolean
 }
+
+
+
